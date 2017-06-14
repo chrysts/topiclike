@@ -16,16 +16,16 @@ public class TopicLikeController {
 
 	@GetMapping(value = "/increment", produces = MediaType.APPLICATION_JSON_VALUE)
 	  public String increment() {
-	    return "";
+	    return "getit";
 	  }
 
 	  @GetMapping(value = "/decrement", produces = MediaType.APPLICATION_JSON_VALUE)
 	  public String decrement(){
-	    return "";
+	    return "decrement";
 	  }
 	  
 	  @PostMapping(value = "/topic/new", produces = MediaType.APPLICATION_JSON_VALUE)
 	  public String createTopic(@RequestParam String topic){
-	    return "";
+	    return "new";
 	  }
 }
