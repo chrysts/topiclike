@@ -1,6 +1,5 @@
 package com.topiclike.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -15,14 +14,7 @@ public class TopicServiceImpl implements TopicService{
 	public static TopListTopic topicList = new TopListTopic();
 	
 	public List<Topic> getTopListTopic(int limit){
-		List<Topic> topTopics = new ArrayList<>();
-		Topic cursor = topicList.getTopicHead();
-		int sum = 0;
-		do{
-			topTopics.add(cursor);
-			cursor = cursor.getNextTopic();
-		}while(cursor != null && sum++ < limit);
-		return topTopics;
+		return topicList.getTopics(limit);
 	}
 
 	@Override

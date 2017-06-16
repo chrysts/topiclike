@@ -1,7 +1,11 @@
 package com.topiclike.data.structure;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.topiclike.model.Topic;
 
@@ -22,16 +26,19 @@ public class TopListTopic {
 		Topic topic = mapTopic.get(topicName);
 		topic.setVote(topic.getVote() + 1);
 		updateOrderListIncrement(topic);
+	
 	}
 	
 	public synchronized void decrementLike(String topicName){
 		Topic topic = mapTopic.get(topicName);
 		topic.setVote(topic.getVote() - 1);
 		updateOrderListDecrement(topic);
+	
 	}
 	
 	public synchronized Topic createTopic(String topicName){
 		Topic topic = new Topic(topicName, ZERO_VOTE);
+		topic.setCreatedDate(new Date());
 		
 		if(null == topicHead){
 			topicHead = topic;
@@ -44,6 +51,18 @@ public class TopListTopic {
 		mapTopic.put(topicName, topic);
 		return topic;
 	}
+	
+	public synchronized List<Topic> getTopics(int limit){
+		List<Topic> topTopics = new ArrayList<>();
+		Topic cursor = topicHead;
+		int sum = 0;
+		do{
+			topTopics.add(cursor);
+			cursor = cursor.getNextTopic();
+		}while(cursor != null && sum++ < limit);
+		
+		return topTopics;
+	} 
 	
 	private void updateOrderListIncrement(Topic topic){
 		Topic higherOrderTopic = topic.getPrevTopic(); 
@@ -60,6 +79,12 @@ public class TopListTopic {
 	}
 	
 	public void shiftTopic(Topic firstTopic, Topic secondTopic){
+		if(topicHead == firstTopic){
+			topicHead = secondTopic;
+		}
+		if(topicTail == secondTopic){
+			topicTail = firstTopic;
+		}
 		secondTopic.setPrevTopic(firstTopic.getPrevTopic());
 		firstTopic.setNextTopic(secondTopic.getNextTopic());
 		firstTopic.setPrevTopic(secondTopic);
@@ -80,5 +105,13 @@ public class TopListTopic {
 	
 	public Topic getTopicTail(){
 		return topicTail;
+	}
+	
+	public Map<String, Topic> getMapTopic() {
+		return mapTopic;
+	}
+
+	public void setMapTopic(Map<String, Topic> mapTopic) {
+		this.mapTopic = mapTopic;
 	}
 }
