@@ -30,15 +30,19 @@ public class TopListTopic {
 		updateOrderListDecrement(topic);
 	}
 	
-	public synchronized void createTopic(String topicName){
+	public synchronized Topic createTopic(String topicName){
 		Topic topic = new Topic(topicName, ZERO_VOTE);
-		topicTail.setNextTopic(topic);
-		topic.setPrevTopic(topicTail);
-		topicTail = topic;
+		
 		if(null == topicHead){
 			topicHead = topic;
+			topicTail = topic;
+		}else{
+			topicTail.setNextTopic(topic);
+			topic.setPrevTopic(topicTail);
+			topicTail = topic;
 		}
 		mapTopic.put(topicName, topic);
+		return topic;
 	}
 	
 	private void updateOrderListIncrement(Topic topic){
@@ -70,4 +74,11 @@ public class TopListTopic {
 		this.topicTail = topicTail;
 	}
 	
+	public Topic getTopicHead(){
+		return topicHead;
+	}
+	
+	public Topic getTopicTail(){
+		return topicTail;
+	}
 }
