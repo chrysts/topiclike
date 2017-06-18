@@ -11,7 +11,7 @@ import com.topiclike.service.TopicService;
 @Service
 public class TopicServiceImpl implements TopicService{
 	
-	public static TopListTopic topicList = new TopListTopic();
+	private static TopListTopic topicList = new TopListTopic();
 	
 	public List<Topic> getTopListTopic(int limit){
 		return topicList.getTopics(limit);

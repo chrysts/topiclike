@@ -13,9 +13,9 @@ public class TopListTopic {
 
 	
 	private final static int ZERO_VOTE = 0;
-	private Node topicHead ;
-	private Node topicTail ;
-	Map<String, Node> mapTopic = new HashMap<>();
+	private static Node topicHead ;
+	private static Node topicTail ;
+	private static Map<String, Node> mapTopic = new HashMap<>();
 	
 	private class Node{
 		Topic topic;
@@ -49,9 +49,6 @@ public class TopListTopic {
 		Topic topic = currentNode.topic;
 		topic.setVote(topic.getVote() - 1);
 		topic.setDecrement(topic.getDecrement() + 1);
-		
-		
-		
 		updateOrderListDecrement(currentNode);
 	
 	}
@@ -65,10 +62,9 @@ public class TopListTopic {
 			topicTail = newNode;
 			
 		}else{
-			topicTail.next = newNode;
 			newNode.prev = topicTail;
+			topicTail.next = newNode;
 			topicTail = newNode;
-			
 		}
 		mapTopic.put(topicName, newNode);
 		return topic;
@@ -101,12 +97,16 @@ public class TopListTopic {
 	}
 	
 	public void shiftTopic(Node firstTopicNode, Node secondTopicNode){
-		if(topicHead.topic == firstTopicNode.topic){
+		if(topicHead == firstTopicNode){
 			topicHead = secondTopicNode;
 		}
-		if(topicTail.topic == secondTopicNode.topic){
+		if(topicTail == secondTopicNode){
 			topicTail = firstTopicNode;
 		}
+		if(firstTopicNode.prev != null)
+			firstTopicNode.prev.next = secondTopicNode;
+		if(secondTopicNode.next != null)
+			secondTopicNode.next.prev = firstTopicNode;
 		secondTopicNode.prev = firstTopicNode.prev;
 		firstTopicNode.next = secondTopicNode.next;
 		firstTopicNode.prev = secondTopicNode;
