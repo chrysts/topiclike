@@ -5,7 +5,7 @@
 <head>
 	<script type="text/javascript" src="${baseURL}/resources/jquery.js"></script>
 	<script>
-		window.applicationBasePathLocation = ${baseURL};
+		window.applicationBasePathLocation = "${baseURL}";
 	</script>
 </head>
 
