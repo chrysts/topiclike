@@ -13,38 +13,39 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.topiclike.model.Topic;
+import com.topiclike.request.TopicRequest;
 import com.topiclike.service.TopicService;
 
 
 @RestController
-@RequestMapping(value = "api/base")
+@RequestMapping(value = "api/topic")
 public class TopicLikeController {
 	private static final String NUM_MAX_LIST_TOPIC = "20";
 	
 	@Autowired
 	private TopicService topicService;
 
-	  @GetMapping(value = "/increment", produces = MediaType.APPLICATION_JSON_VALUE)
-	  public void increment(@RequestParam String topicName) {
-		topicService.incrementTopic(topicName);
+	  @PostMapping(value = "/increment", produces = MediaType.APPLICATION_JSON_VALUE)
+	  public void increment(@RequestBody TopicRequest topicReq) {
+		topicService.incrementTopic(topicReq.getTopicName());
 	  }
 
-	  @GetMapping(value = "/decrement", produces = MediaType.APPLICATION_JSON_VALUE)
-	  public void decrement(@RequestParam String topicName){
-	    topicService.decrementTopic(topicName);
+	  @PostMapping(value = "/decrement", produces = MediaType.APPLICATION_JSON_VALUE)
+	  public void decrement(@RequestBody TopicRequest topicReq){
+	    topicService.decrementTopic(topicReq.getTopicName());
 	  }
 	  
-	  @PostMapping(value = "/topic/create", produces = MediaType.APPLICATION_JSON_VALUE)
-	  public Topic createTopic(@RequestBody String topicName){
-	    return topicService.createTopic(topicName);
+	  @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
+	  public Topic createTopic(@RequestBody TopicRequest topicReq){
+	    return topicService.createTopic(topicReq.getTopicName());
 	  }
 	  
-	  @GetMapping(value= "/topic/get", produces = MediaType.APPLICATION_JSON_VALUE)
+	  @GetMapping(value= "/get", produces = MediaType.APPLICATION_JSON_VALUE)
 	  public List<Topic> getTopics(@RequestParam(defaultValue=NUM_MAX_LIST_TOPIC) Integer limit){
 		  return topicService.getTopListTopic(limit);
 	  }
 	  
-	  @GetMapping(value= "/topic/test", produces = MediaType.APPLICATION_JSON_VALUE)
+	  @GetMapping(value= "/test", produces = MediaType.APPLICATION_JSON_VALUE)
 	  public String getTest(){
 		  return "{\"success\":true}";
 	  }

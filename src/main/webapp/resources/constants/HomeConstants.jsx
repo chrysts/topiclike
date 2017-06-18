@@ -1,0 +1,16 @@
+var _BASE = "CASE_CONFIGURATION_CONSTANTS";
+
+function construct(value) {
+	return _BASE + "_" + value;
+}
+
+module.exports = {
+	GET_TOPICS : construct("GET_TOPICS"),
+	INCREMENT_TOPIC : construct("INCREMENT_TOPIC"),
+	DECREMENT_TOPIC : construct("DECREMENT_TOPIC"),
+	CREATE_TOPIC : construct("CREATE_TOPIC"),
+	RECEIVE_TOPICS : construct("RECEIVE_TOPICS"),
+	RECEIVE_INCREMENT_TOPIC : construct("RECEIVE_INCREMENT_TOPIC"),
+	RECEIVE_DECREMENT_TOPIC: construct("RECEIVE_DECREMENT_TOPIC"),
+	RECEIVE_CREATE_TOPIC : construct("RECEIVE_CREATE_TOPIC")
+};

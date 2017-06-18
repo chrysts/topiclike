@@ -13,9 +13,22 @@ public class TopListTopic {
 
 	
 	private final static int ZERO_VOTE = 0;
-	private Topic topicHead ;
-	private Topic topicTail ;
-	Map<String, Topic> mapTopic = new HashMap<>();
+	private Node topicHead ;
+	private Node topicTail ;
+	Map<String, Node> mapTopic = new HashMap<>();
+	
+	private class Node{
+		Topic topic;
+		private Node next;
+		private Node prev;
+		
+		public Node(Topic topic){
+			next = null;
+			prev = null;
+			this.topic = topic;
+		}
+	}
+	
 	
 	public TopListTopic(){
 		topicHead = null;
@@ -23,95 +36,104 @@ public class TopListTopic {
 	}
 	
 	public synchronized void incrementLike(String topicName){
-		Topic topic = mapTopic.get(topicName);
+		Node currentNode = mapTopic.get(topicName);
+		Topic topic = currentNode.topic;
 		topic.setVote(topic.getVote() + 1);
-		updateOrderListIncrement(topic);
-	
+		topic.setIncrement(topic.getIncrement() + 1);
+		updateOrderListIncrement(currentNode);
+		
 	}
 	
 	public synchronized void decrementLike(String topicName){
-		Topic topic = mapTopic.get(topicName);
+		Node currentNode = mapTopic.get(topicName);
+		Topic topic = currentNode.topic;
 		topic.setVote(topic.getVote() - 1);
-		updateOrderListDecrement(topic);
+		topic.setDecrement(topic.getDecrement() + 1);
+		
+		
+		
+		updateOrderListDecrement(currentNode);
 	
 	}
 	
 	public synchronized Topic createTopic(String topicName){
-		Topic topic = new Topic(topicName, ZERO_VOTE);
+		Topic topic = new Topic(topicName, ZERO_VOTE, ZERO_VOTE, ZERO_VOTE);
 		topic.setCreatedDate(new Date());
-		
+		Node newNode = new Node(topic);
 		if(null == topicHead){
-			topicHead = topic;
-			topicTail = topic;
+			topicHead = newNode;
+			topicTail = newNode;
+			
 		}else{
-			topicTail.setNextTopic(topic);
-			topic.setPrevTopic(topicTail);
-			topicTail = topic;
+			topicTail.next = newNode;
+			newNode.prev = topicTail;
+			topicTail = newNode;
+			
 		}
-		mapTopic.put(topicName, topic);
+		mapTopic.put(topicName, newNode);
 		return topic;
 	}
 	
 	public synchronized List<Topic> getTopics(int limit){
 		List<Topic> topTopics = new ArrayList<>();
-		Topic cursor = topicHead;
+		Node cursor = topicHead;
 		int sum = 0;
-		do{
-			topTopics.add(cursor);
-			cursor = cursor.getNextTopic();
-		}while(cursor != null && sum++ < limit);
+		while(cursor != null && sum++ < limit){
+			topTopics.add(cursor.topic);
+			cursor = cursor.next;
+		}
 		
 		return topTopics;
 	} 
 	
-	private void updateOrderListIncrement(Topic topic){
-		Topic higherOrderTopic = topic.getPrevTopic(); 
-		if(higherOrderTopic != null && higherOrderTopic.getVote() < topic.getVote()){
-			shiftTopic(higherOrderTopic, topic);
+	private void updateOrderListIncrement(Node currentNode){
+		Node higherOrderTopic = currentNode.prev; 
+		if(higherOrderTopic != null && higherOrderTopic.topic.getVote() < currentNode.topic.getVote()){
+			shiftTopic(higherOrderTopic, currentNode);
 		}
 	}
 	
-	private void updateOrderListDecrement(Topic topic){
-		Topic lowerOrderTopic = topic.getNextTopic(); 
-		if(lowerOrderTopic != null && lowerOrderTopic.getVote() > topic.getVote()){
-			shiftTopic(topic, lowerOrderTopic);
+	private void updateOrderListDecrement(Node currentNode){
+		Node lowerOrderTopic = currentNode.next; 
+		if(lowerOrderTopic != null && lowerOrderTopic.topic.getVote() > currentNode.topic.getVote()){
+			shiftTopic(currentNode, lowerOrderTopic);
 		}
 	}
 	
-	public void shiftTopic(Topic firstTopic, Topic secondTopic){
-		if(topicHead == firstTopic){
-			topicHead = secondTopic;
+	public void shiftTopic(Node firstTopicNode, Node secondTopicNode){
+		if(topicHead.topic == firstTopicNode.topic){
+			topicHead = secondTopicNode;
 		}
-		if(topicTail == secondTopic){
-			topicTail = firstTopic;
+		if(topicTail.topic == secondTopicNode.topic){
+			topicTail = firstTopicNode;
 		}
-		secondTopic.setPrevTopic(firstTopic.getPrevTopic());
-		firstTopic.setNextTopic(secondTopic.getNextTopic());
-		firstTopic.setPrevTopic(secondTopic);
-		secondTopic.setNextTopic(firstTopic);
+		secondTopicNode.prev = firstTopicNode.prev;
+		firstTopicNode.next = secondTopicNode.next;
+		firstTopicNode.prev = secondTopicNode;
+		secondTopicNode.next = firstTopicNode;
 	}
 	
-	public void setTopicHead(Topic topicHead){
+	public void setTopicHead(Node topicHead){
 		this.topicHead = topicHead;
 	}
 	
-	public void setTopicTail(Topic topicTail){
+	public void setTopicTail(Node topicTail){
 		this.topicTail = topicTail;
 	}
 	
-	public Topic getTopicHead(){
+	public Node getTopicHead(){
 		return topicHead;
 	}
 	
-	public Topic getTopicTail(){
+	public Node getTopicTail(){
 		return topicTail;
 	}
 	
-	public Map<String, Topic> getMapTopic() {
+	public Map<String, Node> getMapTopic() {
 		return mapTopic;
 	}
 
-	public void setMapTopic(Map<String, Topic> mapTopic) {
+	public void setMapTopic(Map<String, Node> mapTopic) {
 		this.mapTopic = mapTopic;
 	}
 }

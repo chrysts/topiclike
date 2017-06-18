@@ -3,25 +3,32 @@ package com.topiclike.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Topic implements Serializable {
+public class Topic  {
 
-	private static final long serialVersionUID = -7165248560144267L;
 	
 	private String topicName;
 	private long vote;
+	private long increment;
+	private long decrement;
 	// linked to another topic :
-	private Topic nextTopic; 
-	private Topic prevTopic;
+
 	
 	private Date createdDate;
 
-	public Topic(){}
+	public Topic(){
+		this.topicName = "";
+		this.vote = 0;
+		this.increment = 0;
+		this.decrement = 0;
+		
+	}
 	
-	public Topic(String topicName, int vote){
+	public Topic(String topicName, int vote, int increment, int decrement){
 		this.topicName = topicName;
 		this.vote = vote;
-		nextTopic = null;
-		prevTopic = null;
+		this.increment = increment;
+		this.decrement = decrement;
+		
 	}
 	
 	public String getTopicName() {
@@ -47,33 +54,30 @@ public class Topic implements Serializable {
 	public void setVote(long vote) {
 		this.vote = vote;
 	}
-
-	public Topic getPrevTopic() {
-		return prevTopic;
+	public long getDecrement() {
+		return decrement;
 	}
 
-	public void setPrevTopic(Topic prevTopic) {
-		this.prevTopic = prevTopic;
+	public void setDecrement(long decrement) {
+		this.decrement = decrement;
 	}
 
-	public Topic getNextTopic() {
-		return nextTopic;
+	public long getIncrement() {
+		return increment;
 	}
 
-	public void setNextTopic(Topic nextTopic) {
-		this.nextTopic = nextTopic;
+	public void setIncrement(long increment) {
+		this.increment = increment;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
 				+ ((createdDate == null) ? 0 : createdDate.hashCode());
-		result = prime * result
-				+ ((nextTopic == null) ? 0 : nextTopic.hashCode());
-		result = prime * result
-				+ ((prevTopic == null) ? 0 : prevTopic.hashCode());
+		result = prime * result + (int) (decrement ^ (decrement >>> 32));
+		result = prime * result + (int) (increment ^ (increment >>> 32));
 		result = prime * result
 				+ ((topicName == null) ? 0 : topicName.hashCode());
 		result = prime * result + (int) (vote ^ (vote >>> 32));
@@ -94,15 +98,9 @@ public class Topic implements Serializable {
 				return false;
 		} else if (!createdDate.equals(other.createdDate))
 			return false;
-		if (nextTopic == null) {
-			if (other.nextTopic != null)
-				return false;
-		} else if (!nextTopic.equals(other.nextTopic))
+		if (decrement != other.decrement)
 			return false;
-		if (prevTopic == null) {
-			if (other.prevTopic != null)
-				return false;
-		} else if (!prevTopic.equals(other.prevTopic))
+		if (increment != other.increment)
 			return false;
 		if (topicName == null) {
 			if (other.topicName != null)
@@ -113,6 +111,9 @@ public class Topic implements Serializable {
 			return false;
 		return true;
 	}
+
+	
+	
 	
 	
 }
