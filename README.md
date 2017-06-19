@@ -26,3 +26,30 @@ MVC is used here as Spring does support a MVC architure.
 
 ===== Frontend ===============
 Frontend uses React.js with Flux framework as the architecture. 
+
+How to deploy: 
+Command : 
+1. mvn clean install
+
+
+How to create bundle.js:
+Please install using npm: 
+- gulp
+- react
+- react-dom
+- babel-preset-react
+- babelify
+- browserify
+- flux
+- gulp
+- gulp-rename
+- gulp-uglify
+- react-safe-render
+
+Then, please run : gulp
+
+
+How to run Springboot application : 
+java -jar ./target/topiclike-0.0.1-SNAPSHOT.war
+
+
