@@ -15,7 +15,7 @@ Assumptions made here :
 
 ==== DATA STRUCTURE =========
 The data structure used in this project is doubly linked list and hashmap.
-It is expected to have O(1) with this data structure when insert, increment, or decrement takes place.
+It is expected to have O(n) with this data structure when insert, increment, or decrement takes place.
 
 e.g. : 
 We have three topics A, B, C and they have 15, 11, and 11 upvotes respectively.
