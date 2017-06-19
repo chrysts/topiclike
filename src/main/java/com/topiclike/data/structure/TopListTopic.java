@@ -13,9 +13,9 @@ public class TopListTopic {
 
 	
 	private final static int ZERO_VOTE = 0;
-	private static Node topicHead ;
-	private static Node topicTail ;
-	private static Map<String, Node> mapTopic = new HashMap<>();
+	private Node topicHead ;
+	private Node topicTail ;
+	private Map<String, Node> mapTopic = new HashMap<>();
 	
 	private class Node{
 		Topic topic;
