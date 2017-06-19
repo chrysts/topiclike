@@ -84,6 +84,10 @@ public class TopListTopic {
 	
 	private void updateOrderListIncrement(Node currentNode){
 		Node higherOrderTopic = currentNode.prev; 
+		while(higherOrderTopic != null && higherOrderTopic.prev != null &&
+				higherOrderTopic.prev.topic.getVote() < currentNode.topic.getVote()){
+			higherOrderTopic = higherOrderTopic.prev;
+		}
 		if(higherOrderTopic != null && higherOrderTopic.topic.getVote() < currentNode.topic.getVote()){
 			shiftTopic(higherOrderTopic, currentNode);
 		}
@@ -91,6 +95,10 @@ public class TopListTopic {
 	
 	private void updateOrderListDecrement(Node currentNode){
 		Node lowerOrderTopic = currentNode.next; 
+		while(lowerOrderTopic != null && lowerOrderTopic.next != null &&
+				lowerOrderTopic.next.topic.getVote() > currentNode.topic.getVote()){
+			lowerOrderTopic = lowerOrderTopic.next;
+		}
 		if(lowerOrderTopic != null && lowerOrderTopic.topic.getVote() > currentNode.topic.getVote()){
 			shiftTopic(currentNode, lowerOrderTopic);
 		}
@@ -107,10 +115,23 @@ public class TopListTopic {
 			firstTopicNode.prev.next = secondTopicNode;
 		if(secondTopicNode.next != null)
 			secondTopicNode.next.prev = firstTopicNode;
+		Node firstNextTemp = firstTopicNode.next;
+		Node secondPrevTemp = secondTopicNode.prev;
+		
+		
 		secondTopicNode.prev = firstTopicNode.prev;
 		firstTopicNode.next = secondTopicNode.next;
-		firstTopicNode.prev = secondTopicNode;
-		secondTopicNode.next = firstTopicNode;
+		if(firstNextTemp != secondTopicNode){
+			firstTopicNode.prev = secondPrevTemp;
+			secondTopicNode.next = firstNextTemp;
+			firstNextTemp.prev = secondTopicNode;
+			secondPrevTemp.next = firstTopicNode;
+		}else{
+			firstTopicNode.prev = secondTopicNode;
+			secondTopicNode.next = firstTopicNode;
+		}
+		
+		
 	}
 	
 	public void setTopicHead(Node topicHead){
